@@ -1,5 +1,6 @@
 <?php
 
+App::import('Vendor', 'Oauth.oauth2');
 class OAuth2_DataStore implements OAuth2_DataStore_Interface {
 
 	private $token = null;
