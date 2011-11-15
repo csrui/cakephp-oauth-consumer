@@ -13,13 +13,15 @@ class OauthConsumerComponent extends Object {
 	private $service = null;
 	
 	private $api_endpoint = null;
+	
+	private $redirect_on_error = '/';
 
 	//called before Controller::beforeFilter()
 	function initialize(&$controller, $settings = array()) {
 		// saving the controller reference for later use
 		$this->controller =& $controller;
 		
-		App::import('Vendor', 'Oauth.oauth2');		
+		App::import('Vendor', 'Oauth.oauth2');
 		App::import('Lib', 'Oauth.token_datastore');
 		$this->data_store = new OAuth2_DataStore();
 				
@@ -40,7 +42,9 @@ class OauthConsumerComponent extends Object {
 	
 	public function authorize() {
 		
-		if (isset($_GET['code'])) {
+		if (isset($_GET['error'])) {
+			$this->controller->redirect($this->redirect_on_error);
+		} elseif (isset($_GET['code'])) {
 		    $this->service->getAccessToken();
 		} else {
 			$this->service->authorize();
